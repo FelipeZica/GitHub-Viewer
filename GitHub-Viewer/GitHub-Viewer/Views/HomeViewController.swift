@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import Combine
 
-class HomeView:UIViewController{
+class HomeViewController:UIViewController{
     //Propriedades
     let viewModel = HomeViewModel()
     var cancellables = Set<AnyCancellable>()
@@ -92,7 +92,7 @@ class HomeView:UIViewController{
     }
 }
 //Configurações do textfield do username, adiciona o texto digitado em uma variável e adiciona a função de fechar o teclado apertando o botão return, respectivamente
-extension HomeView: UITextFieldDelegate{
+extension HomeViewController: UITextFieldDelegate{
     func textFieldDidEndEditing(_ textField: UITextField) {
         self.usernamer = textField.text ?? ""
     }
