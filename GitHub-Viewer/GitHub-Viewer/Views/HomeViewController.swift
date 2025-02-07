@@ -78,8 +78,10 @@ class HomeViewController:UIViewController{
     //Função que inicia o monitoramento das variáveis de erro e repositorios
     private func setupBindings() {
         viewModel.$repositories
-            .sink { repositories in
-                //TODO: Navegação para a tela de detalhes
+            .sink { [weak self] repositories in
+                if !repositories.isEmpty{
+                    self?.navigateToDetails(repositories: repositories)
+                }
             }
             .store(in: &cancellables)
         
@@ -96,11 +98,23 @@ extension HomeViewController: UITextFieldDelegate{
     func textFieldDidEndEditing(_ textField: UITextField) {
         self.usernamer = textField.text ?? ""
     }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
 }
-//#Preview{
-//    HomeView()
-//}
+//Implementação do delegate e navegação para view de detalhes
+extension HomeViewController: DetailsViewControllerDelegate{
+    private func navigateToDetails(repositories: [UserRepositories]) {
+        let detailsVC = DetailsViewController()
+        detailsVC.repositories = repositories
+        detailsVC.delegate = self
+        self.navigationController?.pushViewController(detailsVC, animated: true)
+    }
+    //Remove as ferencias ao usuário anterior
+    func didFinishViewingDetails() {
+        self.usernamer = ""
+        self.usernameTextField.text = "" 
+    }
+}
