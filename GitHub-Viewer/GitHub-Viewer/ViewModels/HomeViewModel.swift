@@ -15,7 +15,7 @@ protocol HomeViewModelProtocol{
 }
 
 class HomeViewModel:HomeViewModelProtocol{
-    //propriedades
+    //MARK: propriedades
     @Published var repositories: [UserRepositories] = []
     @Published var errorMessage: ErrorType?
     private let apiService: APIServiceProtocol
@@ -24,7 +24,7 @@ class HomeViewModel:HomeViewModelProtocol{
         self.apiService = apiService
     }
     
-    //Função que chama a getRepositories da classe APIServices
+    //MARK: Método que chama a getRepositories da classe APIServices
     func fetchRepositoriesByUser(for user: String) {
         apiService.getRepositories(name: user) { [weak self] result in
             DispatchQueue.main.async {

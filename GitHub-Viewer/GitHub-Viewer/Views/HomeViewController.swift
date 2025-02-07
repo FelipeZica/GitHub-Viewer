@@ -10,12 +10,12 @@ import UIKit
 import Combine
 
 class HomeViewController:UIViewController{
-    //Propriedades
+    //MARK: Propriedades
     let viewModel = HomeViewModel()
     var cancellables = Set<AnyCancellable>()
     private var usernamer: String = ""
     
-    //Componentes
+    //MARK: Componentes
     lazy private var usernameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Username"
@@ -42,7 +42,7 @@ class HomeViewController:UIViewController{
         setupUIComponents()
     }
     
-    //Função de organização dos componentes (Constraints) e adição na View
+    //MARK: Método de organização dos componentes (Constraints) e adição na View
     private func setupUIComponents(){
         self.view.addSubview(usernameTextField)
         self.view.addSubview(searchButton)
@@ -57,7 +57,7 @@ class HomeViewController:UIViewController{
             searchButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
         ])
     }
-    //Função que verifica o nome digitado e faz a requisição para a API atravéz da ViewModel
+    //MARK: Método que valida o nome digitado e faz a requisição para a API atravéz da ViewModel
     @objc private func searchRepositories(_ sender: UIButton){
         usernameTextField.resignFirstResponder()
         guard !usernamer.isEmpty else{
@@ -67,7 +67,7 @@ class HomeViewController:UIViewController{
         self.viewModel.fetchRepositoriesByUser(for: usernamer)
     }
     
-    //Alerta personalizável para menssagens de erro
+    //MARK: Alerta personalizável para menssagens de erro
     func alert(title: String, message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default)
@@ -75,7 +75,7 @@ class HomeViewController:UIViewController{
         self.present(alertController, animated: true)
     }
     
-    //Função que inicia o monitoramento das variáveis de erro e repositorios
+    //MARK: Método que inicia o monitoramento das variáveis de erro e repositorios
     private func setupBindings() {
         //Gatilho da navegação
         viewModel.$repositories
@@ -94,7 +94,7 @@ class HomeViewController:UIViewController{
             .store(in: &cancellables)
     }
 }
-//Configurações do textfield do username, adiciona o texto digitado em uma variável e adiciona a função de fechar o teclado apertando o botão return, respectivamente
+//MARK: Configurações do textfield do username, adiciona o texto digitado em uma variável e adiciona a função de fechar o teclado apertando o botão return, respectivamente
 extension HomeViewController: UITextFieldDelegate{
     func textFieldDidEndEditing(_ textField: UITextField) {
         self.usernamer = textField.text ?? ""
@@ -105,7 +105,7 @@ extension HomeViewController: UITextFieldDelegate{
         return true
     }
 }
-//Implementação do delegate e navegação para view de detalhes
+//MARK: Implementação do delegate e navegação para view de detalhes
 extension HomeViewController: DetailsViewControllerDelegate{
     private func navigateToDetails(repositories: [UserRepositories]) {
         let detailsVC = DetailsViewController()
@@ -113,7 +113,7 @@ extension HomeViewController: DetailsViewControllerDelegate{
         detailsVC.delegate = self
         self.navigationController?.pushViewController(detailsVC, animated: true)
     }
-    //Remove as ferencias ao usuário anterior
+    //MARK: Remove as ferencias ao usuário anterior
     func didFinishViewingDetails() {
         self.usernamer = ""
         self.usernameTextField.text = ""

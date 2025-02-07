@@ -14,7 +14,7 @@ protocol DetailsViewModelProtocol{
 }
 
 class DetailsViewModel:DetailsViewModelProtocol {
-    //Propriedades
+    //MARK: Propriedades
     @Published var repositories: [UserRepositories] = []
     @Published var errorMessage: ErrorType?
     private let apiService: APIServiceProtocol
@@ -22,7 +22,7 @@ class DetailsViewModel:DetailsViewModelProtocol {
     init(apiService: APIServiceProtocol = APIService.shared) {
         self.apiService = apiService
     }
-    //Função que busca atualizações nos repositorios do usuário
+    //MARK: Função que busca atualizações nos repositorios do usuário
     func reloadData(user: String){
         apiService.getRepositories(name: user) { [weak self] result in
             DispatchQueue.main.async {
