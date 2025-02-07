@@ -77,6 +77,7 @@ class HomeViewController:UIViewController{
     
     //Função que inicia o monitoramento das variáveis de erro e repositorios
     private func setupBindings() {
+        //Gatilho da navegação
         viewModel.$repositories
             .sink { [weak self] repositories in
                 if !repositories.isEmpty{
@@ -84,7 +85,7 @@ class HomeViewController:UIViewController{
                 }
             }
             .store(in: &cancellables)
-        
+        //Validador de erros
         viewModel.$errorMessage
             .compactMap { $0 }
             .sink { error in
@@ -115,6 +116,6 @@ extension HomeViewController: DetailsViewControllerDelegate{
     //Remove as ferencias ao usuário anterior
     func didFinishViewingDetails() {
         self.usernamer = ""
-        self.usernameTextField.text = "" 
+        self.usernameTextField.text = ""
     }
 }
