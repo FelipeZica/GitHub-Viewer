@@ -7,8 +7,8 @@
 
 import Foundation
 
-enum ErrorType: Error{
-    case networkError
-    case userNotFound
+enum ErrorType: String, Error{
+    case networkError = "A network error has occurred. Check your Internet connection and try again later."
+    case userNotFound = "User not found. Please enter another name"
     case dataNotFound
 }
