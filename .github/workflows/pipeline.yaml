@@ -1,0 +1,43 @@
+# This workflow will build a Swift project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-swift
+
+name: Swift CI
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    name: Run Unit Tests
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      
+      - name: Set up Xcode
+        uses: actions/xcode@v2
+        with:
+          xcode-version: "16.2.0"
+
+      # Cache para acelerar builds futuros
+      - name: Cache SwiftPM packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/swiftpm
+            ~/Library/Developer/Xcode/DerivedData
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+
+      # Executa os testes unitários
+      - name: Run Tests
+        run: |
+          xcodebuild test \
+            -workspace "GitHub-Viewer.xcworkspace" \ # GitHub-Viewer
+            -scheme "GitHub-Viewer" \ # GitHub-Viewer
+            -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.2' \
+            CODE_SIGNING_REQUIRED=NO
