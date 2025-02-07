@@ -24,7 +24,6 @@ class DetailsViewController: UIViewController {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person.circle.fill")
         imageView.tintColor = .gray
-        imageView.layer.cornerRadius = 150 / 2
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -33,7 +32,8 @@ class DetailsViewController: UIViewController {
     
     lazy private var usernameLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 18)
+        label.font = UIFont.preferredFont(forTextStyle: .headline)
+        label.adjustsFontForContentSizeCategory = true
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -54,7 +54,7 @@ class DetailsViewController: UIViewController {
     //MARK: Ciclo de vida da View
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(red: 174, green: 174, blue: 178, alpha: 1)
+        view.backgroundColor = .systemBackground
         
         setupUI()
         
@@ -65,6 +65,11 @@ class DetailsViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         self.delegate?.didFinishViewingDetails()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2
     }
     
     //MARK: Método de organização dos componentes (Constraints) e adição na View
@@ -78,8 +83,8 @@ class DetailsViewController: UIViewController {
         NSLayoutConstraint.activate([
             profileImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             profileImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            profileImageView.widthAnchor.constraint(equalToConstant: 150),
-            profileImageView.heightAnchor.constraint(equalToConstant: 150),
+            profileImageView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.25),
+            profileImageView.heightAnchor.constraint(equalTo: profileImageView.widthAnchor),
             
             usernameLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 10),
             usernameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
